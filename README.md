@@ -65,30 +65,21 @@ tail –f /var/log/messages or dmesg
 ```bash
 sudo ./mf --out --srcip 10.0.2.15 --proto UDP --action BLOCK 
 ./mf --print
-in/out    src ip    src mask    src port    dest ip    dest mask     dest port    proto    action
-  out   10.0.2.15      -          -           -           -             -          UDP     BLOCK
+----------------------------------------------
 ping google.com
-ping: unknown host google.com
+----------------------------------------------
 sudo ./mf --delete 1
 sudo ./mf --out --srcip 10.0.2.16 --proto UDP --action BLOCK
 ./mf --print
-in/out    src ip    src mask    src port    dest ip    dest mask     dest port    proto    action
-  out   10.0.2.16      -          -           -           -             -          UDP     BLOCK
+---------------------------------------------
 ping google.com
-PING google.com (74.125.235.20) 56(84) bytes of data.
-64 bytes from 74.125.235.20: icmp_seq=1 ttl=52 time=82.2 ms
-^C64 bytes from 74.125.235.20: icmp_seq=2 ttl=52 time=17.6 ms
- 
---- google.com ping statistics ---
-2 packets transmitted, 2 received, 0% packet loss, time 5173ms
-rtt min/avg/max/mdev = 17.675/49.975/82.276/32.301 ms
+---------------------------------------------
 sudo ./mf --delete 1
 sudo ./mf --out --srcip 10.0.2.16 --srcnetmask 255.252.0.0 --proto UDP --action BLOCK
 ./mf --print
-in/out    src ip    src mask    src port    dest ip    dest mask     dest port    proto    action
-  out   10.0.2.16  255.252.0.0  -           -           -             -          UDP     BLOCK
+---------------------------------------------
 ping google.com
-ping: unknown host google.com
+
 ```
 2.2 The idea is first time the ping is blocked because IP address matches the BLOCK rule. Second time the ping can go through because IP address doesn’t match. The third ping is blocked again because the first 14 bits (according to the mask 255.252.0.0) matches.
 
