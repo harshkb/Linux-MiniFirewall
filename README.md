@@ -39,7 +39,7 @@ sudo rmmod mf_km
 Sample Testing
 --------
 
-1. Block all incoming traffic, unblock all outgoing traffic
+# 1. Block all incoming traffic, unblock all outgoing traffic
 
 1.1 Enter the configuration commands below,
 
@@ -58,7 +58,7 @@ in/out    src ip    src mask    src port    dest ip    dest mask     dest port  
 
 tail –f /var/log/messages or dmesg
 
-2. Test IP address and Netmask
+# 2. Test IP address and Netmask
 
 2.1 Replace 10.0.2.15 with your local IP address. Enter the commands below, and check if you can get similar result.
 
