@@ -36,3 +36,51 @@ close the mini firewall
 ```bash
 sudo rmmod mf_km
 ```
+Sample Testing
+--------
+
+### 1. Block all incoming traffic, unblock all outgoing traffic
+
+1.1 Enter the configuration commands below,
+
+```bash
+sudo ./mf --in --proto 3 --action BLOCK
+sudo ./mf --out --proto 3 --action UNBLOCK
+./mf --print
+in/out    src ip    src mask    src port    dest ip    dest mask     dest port    proto    action
+  in        -          -          -           -           -             -          ALL     BLOCK
+  out        -          -          -           -           -             -          ALL     UNBLOCK
+ ```
+ 
+1.2 ping 127.0.0.1 –c 1
+
+1.3 Check the output of the minifirewall kernel module by,
+
+tail –f /var/log/messages or dmesg
+
+### 2. Test IP address and Netmask
+
+2.1 Replace 10.0.2.15 with your local IP address. Enter the commands below, and check if you can get similar result.
+
+```bash
+sudo ./mf --out --srcip 10.0.2.15 --proto UDP --action BLOCK 
+./mf --print
+----------------------------------------------
+ping google.com
+----------------------------------------------
+sudo ./mf --delete 1
+sudo ./mf --out --srcip 10.0.2.16 --proto UDP --action BLOCK
+./mf --print
+---------------------------------------------
+ping google.com
+---------------------------------------------
+sudo ./mf --delete 1
+sudo ./mf --out --srcip 10.0.2.16 --srcnetmask 255.252.0.0 --proto UDP --action BLOCK
+./mf --print
+---------------------------------------------
+ping google.com
+
+```
+2.2 The idea is first time the ping is blocked because IP address matches the BLOCK rule. Second time the ping can go through because IP address doesn’t match. The third ping is blocked again because the first 14 bits (according to the mask 255.252.0.0) matches.
+
+One can also examine the /var/log/messages or dmesg content for verification.
