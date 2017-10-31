@@ -204,12 +204,13 @@ static int check_rule(int in_out, struct sk_buff *skb)
             }
         }
         /* block check， if not just log match*/
-        if (a_rule->action == 0) {
-            printk(KERN_INFO "rule %d match: log match\n", rule_num);
-        } else if (a_rule->action == 1) {
+        if (a_rule->action == 1) {
             printk(KERN_INFO "rule %d match: block\n", rule_num);
-            printk(KERN_INFO "\n");
             return NF_DROP;
+        } else if (a_rule->action == 0) {
+            printk(KERN_INFO "rule %d match: log\n", rule_num);
+            printk(KERN_INFO "\n");
+            return NF_ACCEPT;
         }
     }
     printk(KERN_INFO "\n");
