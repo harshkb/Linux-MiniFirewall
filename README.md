@@ -41,20 +41,23 @@ Sample Testing
 
 ### 1. Block all incoming traffic, unblock all outgoing traffic
 
-1.1 Enter the configuration commands below,
+1.1 Check all the help
+
+```bash
+sudo ./mf --help
+ ```
+
+1.2 Enter the configuration commands below to  Block all incoming traffic, unblock all outgoing traffic,
 
 ```bash
 sudo ./mf --in --proto 3 --action BLOCK
-sudo ./mf --out --proto 3 --action UNBLOCK
+sudo ./mf --out --proto 3 --action LOG
 ./mf --print
-in/out    src ip    src mask    src port    dest ip    dest mask     dest port    proto    action
-  in        -          -          -           -           -             -          ALL     BLOCK
-  out        -          -          -           -           -             -          ALL     UNBLOCK
  ```
  
-1.2 ping 127.0.0.1 –c 1
+1.3 ping 127.0.0.1 –c 1
 
-1.3 Check the output of the minifirewall kernel module by,
+1.4 Check the output of the minifirewall kernel module by,
 
 tail –f /var/log/messages or dmesg
 
@@ -84,3 +87,16 @@ ping google.com
 2.2 The idea is first time the ping is blocked because IP address matches the BLOCK rule. Second time the ping can go through because IP address doesn’t match. The third ping is blocked again because the first 14 bits (according to the mask 255.252.0.0) matches.
 
 One can also examine the /var/log/messages or dmesg content for verification.
+
+### 3. Block all incoming packets from youtube.com(216.58.221.46)
+
+```bash
+------------------------------
+ping youtube.com
+------------------------------
+
+sudo ./mf --in --srcip 216.58.221.46 --proto 3 --action BLOCK
+
+./mf --print
+ ```
+ping youtube.com will halt after block action 
